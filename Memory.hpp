@@ -12,9 +12,12 @@ public:
 	int read(int);
 	void write(int, int);
 private:
-	std::vector<int> _tape;
 	int _rotation;
 	Tape *_next;
+
+protected:
+	std::vector<int> _tape;
+	Tape *_parent;
 };
 
 class Pointer {

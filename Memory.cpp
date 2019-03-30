@@ -11,13 +11,16 @@ Buffer extern *R;
 
 // Tape
 
-Tape::Tape(int size) : _tape(std::vector<int>(size, 0)), _rotation(0), _next(NULL) { _tape[0] = 1; }
+Tape::Tape(int size) : _tape(std::vector<int>(size, 0)), _rotation(0), _next(NULL), _parent(NULL) { _tape[0] = 1; }
 
 void Tape::spin() {
 	if (_rotation == 359) {
 		_rotation = 0;
 		if (_next == NULL) {
 			_next = new Tape(360);
+			_next->_parent = this;
+			_next->_tape[1] = 9;
+			std::cout << "Made new tape";
 		}
 		else {
 			_next->spin();
@@ -25,6 +28,11 @@ void Tape::spin() {
 	}
 	else
 		_rotation++;
+
+	if (_parent == NULL)
+		POINTER->spin();
+	else
+		_parent->spin();
 }
 
 int Tape::rotation() {

@@ -1,3 +1,5 @@
+// Spin version 1.1
+
 #include <iostream>
 #include "Tokenizer.hpp"
 #include "Memory.hpp"
