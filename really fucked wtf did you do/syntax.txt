@@ -1,0 +1,99 @@
+L
+R
+SPIN
+(
+)
+
+-subcommands (done on L or R)
+write (write data from register to tape)
+read (read data from tape into register)
+sub (subtract data in register by 1)
+dub (multiply data in register by 2)
+copy (transfer data from register to other register)
+in (read input into register)
+out (output data in register to console)
+
+#Program to add 2 to input
+
+L.in // Read input into L
+L.copy // Copy it into R
+R.sub
+R.sub // R is now equal to (input-2)
+L.dub // L is now equal to (input*2)
+// input + 2 = (input*2) - (input-2), so we now want to do L - R
+// to do that, we'll use R as a loop counter
+R.write // pointer now pointing at input-2
+(
+L.sub 
+R.sub
+R.write 
+) // this loop exits when the pointed memory is 0, aka when R = 0 (as we're writing R every iteration)
+L.out // L is now input + 2, so we output
+
+
+#Program to add two inputs
+SPIN // pointing at [1]
+L.in // Read X
+L.copy // Copy X into R
+L.dub 
+L.write // 2X is at [1]
+L.in // Read Y
+SPIN // pointing at [2]
+L.write // Y is at [2]
+(
+R.sub
+L.sub
+L.write
+) // R = X-Y, L and [2] = 0
+L.sub // l is -1
+L.write // [2] = -1
+(
+SPIN
+L.read
+L.sub
+L.write
+) // this will spin until we reach a cell with 1. This means we'll stop at [0]
+// Right now, L = 0, R = X-Y, and [1] = 2X. We need to do [1] - R and output that
+SPIN // pointing at [1]
+L.read // L = 2X
+R.write // X-Y is at [1]
+(
+L.sub
+R.sub
+R.write
+) // this will loop until L = L - R (our final answer)
+L.out
+
+#To add X and Y
+#X+Y = (X*2) - (X-Y)
+
+SPIN
+L.in
+L.copy
+L.dub 
+L.write
+L.in
+SPIN
+L.write
+(
+R.sub
+L.sub
+L.write
+)
+L.sub
+L.write
+(
+SPIN
+L.read
+L.sub
+L.write
+)
+SPIN
+L.read
+R.write
+(
+L.sub
+R.sub
+R.write
+)
+L.out

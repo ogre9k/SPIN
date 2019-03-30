@@ -1,0 +1,91 @@
+
+#include "Memory.hpp"
+#include "Globals.hpp"
+#include <vector>
+#include <iostream>
+
+Tape extern *TAPE;
+Pointer extern *POINTER;
+Buffer extern *L;
+Buffer extern *R;
+
+// Tape
+
+Tape::Tape(int size) : _tape(std::vector<int>(size, 0)), _rotation(0) { _tape[0] = 1; }
+
+void Tape::spin() {
+	if (_rotation == 359)
+		_rotation = 0;
+	else
+		_rotation++;
+}
+
+int Tape::rotation() {
+	return _rotation;
+}
+
+std::vector<int> &Tape::tape() {
+	return _tape;
+}
+
+// Buffer
+Buffer::Buffer(): _value(0) {}
+
+int Buffer::getValue() {
+	return _value;
+}
+
+void Buffer::write() {
+	POINTER->write(_value);
+}
+
+void Buffer::read() {
+	_value = POINTER->read();
+}
+
+void Buffer::sub() {
+	_value--;
+}
+
+void Buffer::dub() {
+	_value += _value;
+}
+
+void Buffer::copy() {
+	if (this == L)
+		_value = R->getValue();
+	else
+		_value = L->getValue();
+}
+
+void Buffer::in() {
+	std::cin >> _value;
+}
+
+void Buffer::out() {
+	std::cout << _value;
+}
+
+// Pointer
+Pointer::Pointer() : _rotation(0){}
+
+void Pointer::spin() {
+	if (_rotation == 359) {
+		_rotation = 0;
+		TAPE->spin();
+	}
+	else
+		_rotation++;
+}
+
+int Pointer::rotation() {
+	return _rotation;
+}
+
+int Pointer::read() {
+	return TAPE->tape()[(_rotation - TAPE->rotation() % 360) / (360 / TAPE->tape().size())];
+}
+
+void Pointer::write(int val) {
+	TAPE->tape()[(_rotation - TAPE->rotation() % 360) / (360 / TAPE->tape().size())] = val;
+}
