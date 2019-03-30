@@ -9,9 +9,12 @@ public:
 	void spin();
 	int rotation();
 	std::vector<int> &tape();
+	int read(int);
+	void write(int, int);
 private:
 	std::vector<int> _tape;
 	int _rotation;
+	Tape *_next;
 };
 
 class Pointer {
@@ -40,6 +43,7 @@ public:
 	void out();
 
 	int getValue();
+	void setValue(int val);
 
 private:
 	int _value;

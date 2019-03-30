@@ -1,3 +1,36 @@
+#This program prints the result of X + Y for user input values
+#Only works when X >= Y
+
+L.read
+SPIN
+L.write
+SPIN
+L.in
+L.copy
+L.dub 
+L.write
+L.in
+SPIN
+L.write
+(
+R.sub 
+L.sub 
+L.write
+)
+L.sub
+L.write
+(
 SPIN
 L.read
+L.sub
+L.write
+)
+SPIN
+L.read
+R.write
+(
+L.sub
+R.sub
+R.write
+)
 L.out

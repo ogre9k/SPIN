@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
-//#include "Memory.hpp"
+#include "Memory.hpp"
 #include "Token.hpp"
 #include "Globals.hpp"
 // The Statement (abstract) class serves as a super class for all statements that
@@ -12,13 +12,10 @@
 
 class Statement {
 public:
-	Statement(Token op);
+	Statement();
 
 	virtual void print() = 0;
 	virtual void evaluate() = 0;
-
-protected:
-	Token _op;
 };
 
 
@@ -35,4 +32,35 @@ public:
 
 private:
 	std::vector<Statement *> _statements;
+};
+
+class SimpleStatement: public Statement {
+public:
+	SimpleStatement();
+
+	void evaluate();
+	void print();
+};
+
+class TargetStatement : public Statement {
+public:
+	TargetStatement(std::string target, std::string op);
+
+	void evaluate();
+	void print();
+
+private:
+	std::string _target;
+	std::string _op;
+};
+
+class LoopStatement : public Statement {
+public:
+	LoopStatement(Statements *statements);
+
+	void evaluate();
+	void print();
+
+private:
+	Statements *_statements;
 };

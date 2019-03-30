@@ -1,6 +1,14 @@
 #include <iostream>
 #include "Tokenizer.hpp"
+#include "Memory.hpp"
+#include "Parser.hpp"
+#include "Statements.hpp"
+#include "Globals.hpp"
 
+Buffer extern *L = new Buffer();
+Buffer extern *R = new Buffer();
+Tape extern *TAPE = new Tape(360);
+Pointer extern *POINTER = new Pointer();
 
 int main(int argc, char *argv[]) {
 
@@ -14,9 +22,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	Tokenizer tokenizer(inputStream);
-	while (!tokenizer.lastToken.eof())
-		tokenizer.getToken();
-	tokenizer.printProcessedTokens();
+	Parser parser(tokenizer);
+	Statements *statements = parser.statements();
+	statements->evaluate();
 
 	return 0;
 }

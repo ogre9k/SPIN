@@ -1,3 +1,0 @@
-SPIN
-L.read
-L.out

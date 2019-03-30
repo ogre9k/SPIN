@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Tokenizer.hpp"
-
+#include <ctype.h>
 
 Tokenizer::Tokenizer(std::ifstream &stream) : ungottenToken{ false }, inStream{ stream }, lastToken{} {}
 
@@ -31,8 +31,14 @@ Token Tokenizer::getToken() {
 	std::string name;
 
 	Token token;
-	while (inStream.get(c) && isspace(c))
+	while (inStream.get(c) && isspace(c)) {
 		;
+	}
+	if (c == '#') {
+		while (inStream.get(c) && c != '\n')
+			;
+		return lastToken = lastToken;
+	}
 
 	if (inStream.eof())
 		token.eof() = true;

@@ -11,11 +11,18 @@ Buffer extern *R;
 
 // Tape
 
-Tape::Tape(int size) : _tape(std::vector<int>(size, 0)), _rotation(0) { _tape[0] = 1; }
+Tape::Tape(int size) : _tape(std::vector<int>(size, 0)), _rotation(0), _next(NULL) { _tape[0] = 1; }
 
 void Tape::spin() {
-	if (_rotation == 359)
+	if (_rotation == 359) {
 		_rotation = 0;
+		if (_next == NULL) {
+			_next = new Tape(360);
+		}
+		else {
+			_next->spin();
+		}
+	}
 	else
 		_rotation++;
 }
@@ -24,6 +31,28 @@ int Tape::rotation() {
 	return _rotation;
 }
 
+int Tape::read(int pointRot) {
+	//std::cout << "Reading from " << (360+(pointRot - _rotation)) % 360 << std::endl;
+	if (_rotation - pointRot == 0) {
+		if (_next == NULL)
+			return 1;
+		else
+			return _next->read(pointRot);
+	}
+	else
+		return _tape[(360 + (pointRot - _rotation)) % 360];
+}
+
+void Tape::write(int pointRot, int val) {
+	if (_rotation - pointRot == 0) {
+		if (_next == NULL)
+			return;
+		else
+			_next->write(pointRot, val);
+	}
+	else
+		_tape[(360 + (pointRot - _rotation)) % 360] = val;
+}
 std::vector<int> &Tape::tape() {
 	return _tape;
 }
@@ -33,6 +62,10 @@ Buffer::Buffer(): _value(0) {}
 
 int Buffer::getValue() {
 	return _value;
+}
+
+void Buffer::setValue(int val) {
+	_value = val;
 }
 
 void Buffer::write() {
@@ -52,10 +85,12 @@ void Buffer::dub() {
 }
 
 void Buffer::copy() {
-	if (this == L)
-		_value = R->getValue();
-	else
-		_value = L->getValue();
+	if (this == L) {
+		R->setValue(_value);
+	}
+	else {
+		L->setValue(_value);
+	}
 }
 
 void Buffer::in() {
@@ -63,7 +98,7 @@ void Buffer::in() {
 }
 
 void Buffer::out() {
-	std::cout << _value;
+	std::cout << _value << std::endl;
 }
 
 // Pointer
@@ -83,9 +118,9 @@ int Pointer::rotation() {
 }
 
 int Pointer::read() {
-	return TAPE->tape()[(_rotation - TAPE->rotation() % 360) / (360 / TAPE->tape().size())];
+	return TAPE->read(_rotation);
 }
 
 void Pointer::write(int val) {
-	TAPE->tape()[(_rotation - TAPE->rotation() % 360) / (360 / TAPE->tape().size())] = val;
+	TAPE->write(_rotation, val);
 }
