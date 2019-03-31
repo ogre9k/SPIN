@@ -71,11 +71,35 @@ void TargetStatement::print() {
 }
 
 // LoopStatement
-LoopStatement::LoopStatement(Statements* statements) : _statements(statements) {}
+LoopStatement::LoopStatement(Statements* statements) : _statements(statements), _start(NULL), _end(NULL) {}
+LoopStatement::LoopStatement(Statements* statements, std::string start, std::string end) : _statements(statements), _start((start == "L" || start == "R") ? (start == "L" ? L : R) : NULL), _end((end == "L" || end == "R") ? (end == "L" ? L : R) : NULL) {}
 
 void LoopStatement::evaluate() {
-	while (POINTER->read() != 0) {
-		_statements->evaluate();
+	if (_start == NULL && _end == NULL) { // ( )
+		while (POINTER->read() != 0) {
+			_statements->evaluate();
+		}
+	}
+	else if (_start != NULL && _end == NULL) { // (.X )
+		if (_start->getValue() != 0) {
+			while (POINTER->read() != 0) {
+				_statements->evaluate();
+			}
+		}
+	}
+	else if (_start == NULL && _end != NULL) { // ( ).X
+		if (POINTER->read() != 0) {
+			do {
+				_statements->evaluate();
+			} while (_end->getValue() != 0);
+		}
+	}
+	else {									// (.X ).Y
+		if (_start->getValue() != 0) {
+			while (_end->getValue() != 0) { 
+				_statements->evaluate();
+			}
+		}
 	}
 }
 

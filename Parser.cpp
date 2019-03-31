@@ -75,9 +75,26 @@ TargetStatement *Parser::targetStatement() {
 }
 
 LoopStatement *Parser::loopStatement() {
+
+	std::string start = "";
+	std::string end = "";
+
 	Token tok = tokenizer.getToken();
 	if (!tok.isOpenLoop())
 		die("Parser::loopStatement", "Expected an (, instead got", tok);
+
+	// Check to see if this uses L or R
+	tok = tokenizer.getToken();
+	if (tok.isDot()) {
+		tok = tokenizer.getToken();
+		if (!tok.isRegister()) {
+			die("Parser::loopStatement", "While parsing (.X, X wasn't a register. Was: ", tok);
+		}
+		start = tok.symbol();
+	}
+	else {
+		tokenizer.ungetToken();
+	}
 
 	Parser parser(tokenizer);
 	Statements *stmts = parser.statements();
@@ -86,5 +103,18 @@ LoopStatement *Parser::loopStatement() {
 	if (!tok.isCloseLoop())
 		die("Parser::loopStatement", "Expected an ), instead got", tok);
 
-	return new LoopStatement(stmts);
+	// Check to see if this uses L or R
+	tok = tokenizer.getToken();
+	if (tok.isDot()) {
+		tok = tokenizer.getToken();
+		if (!tok.isRegister()) {
+			die("Parser::loopStatement", "While parsing ).X, X wasn't a register. Was: ", tok);
+		}
+		end = tok.symbol();
+	}
+	else {
+		tokenizer.ungetToken();
+	}
+
+	return new LoopStatement(stmts, start, end);
 }

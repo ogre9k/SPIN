@@ -57,10 +57,13 @@ private:
 class LoopStatement : public Statement {
 public:
 	LoopStatement(Statements *statements);
+	LoopStatement(Statements *statements, std::string start, std::string end);
 
 	void evaluate();
 	void print();
 
 private:
 	Statements *_statements;
+	Buffer *_start;
+	Buffer *_end;
 };
