@@ -19,8 +19,6 @@ void Tape::spin() {
 		if (_next == NULL) {
 			_next = new Tape(360);
 			_next->_parent = this;
-			_next->_tape[1] = 9;
-			std::cout << "Made new tape";
 		}
 		else {
 			_next->spin();

@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
 	Tokenizer tokenizer(inputStream);
 	Parser parser(tokenizer);
 	Statements *statements = parser.statements();
+	//statements->print();
 	statements->evaluate();
 
 	return 0;

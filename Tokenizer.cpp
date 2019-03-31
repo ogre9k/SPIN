@@ -3,6 +3,10 @@
 #include "Tokenizer.hpp"
 #include <ctype.h>
 
+bool isInstruction(char c) {
+	return (c == 'L' || c == 'R' || c == '.' || c == '(' || c == ')' || c == 'S' || c == 'w' || c == 'r' || c == 's' || c == 'd' || c == 'c' || c == 'i' || c == 'o');
+}
+
 Tokenizer::Tokenizer(std::ifstream &stream) : ungottenToken{ false }, inStream{ stream }, lastToken{} {}
 
 std::string Tokenizer::readName() {
@@ -31,14 +35,21 @@ Token Tokenizer::getToken() {
 	std::string name;
 
 	Token token;
+	// Skip leading whitespace
 	while (inStream.get(c) && isspace(c)) {
 		;
 	}
-	if (c == '#') {
-		while (inStream.get(c) && c != '\n')
+
+	// If we see a comment specifier
+	while (c == '#') {
+		// Skip rest of line
+		while (inStream.get(c) && (c != '\n'))
 			;
-		return lastToken = lastToken;
+		// Skip leading whitespace
+		while (inStream.get(c) && isspace(c))
+			;
 	}
+
 
 	if (inStream.eof())
 		token.eof() = true;

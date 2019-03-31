@@ -6,7 +6,7 @@
 #Only works when X >= Y
 #It relies on the concept that X + Y = (2X) - (X-Y)
 #The reason it doesn't work when X < Y, is because then the term X-Y becomes negative.
-#The program does (2X) - (X-Y) by subtracting 1 from (2X) (X-Y) times.
+#The program does (2X) - (X-Y) by subtracting 1 from (2X), (X-Y) times.
 #Subtracting 1 from a number a negative number of times means adding 1 to it a positive number of times.
 #Unfortunately, SPIN does not have a +1 operation.
 #This means a program that could add X + Y regardless of which is bigger would be significantly more complex.
