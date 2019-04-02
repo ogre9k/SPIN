@@ -1,0 +1,43 @@
+This file contains a list of ideas for the future development of SPIN.
+
+
+IDEA: Make creating a new tape be a command instead of automatic. Also add a command for destroying tape. Tape would be created/destroyed on the outside (so basically a stack).
+
+BENEFITS: Gives user more control over memory. A program that only needs 359 cells of memory will actually end up taking up a lot more than that because it will be creating extra tape levels it doesn't need while accessing the memory it does need. Also, this makes it easier to use NULL pointers. The window to access a NULL pointer becomes smaller the more tapes there are, making it more difficult to manage rotation (as a NULL pointer serves as an easy way to mark the completion of a full rotation on the motor).
+
+CONCERNS: Alignment with the lower tapes. Because higher tapes rotate when a the lower tape completes a 360 degree rotation, it's possible for a new tape to be created and then rotate on the first SPIN command. This means that the number of SPINs before the first rotation of a new tape would depend on the state of the lower tape when the new tape is created. Low concern.
+
+
+IDEA: Make SPIN only affect 1 (user defined) tape level. No more automatic spinning of higher tapes as lower tapes complete rotations.
+
+BENEFITS: Working with higher tapes is basically impossible because the number of spins required. NULL pointers also become increasingly difficult to access as tape height increases.
+
+CONCERNS: How is it called? I imagine something like X.SPIN where X is the level of tape. I'm not super keen on this idea, as I feel like the language would lose a bit of its (awful) charm through the addition of this feature. Giving the user control over creation of tapes might instead be a good alternative to fixing some of the issues that this would fix.
+
+
+IDEA: Type casting
+
+BENEFITS: Allow users to write programs that use more than just ints.
+
+CONCERNS: What types? How is syntax handled? One idea is that the casting happens inside buffers. L.in(str) or some such (I don't like this syntax) would make L cast the next input to string. Then when write is executed the cell's type would cast to the type of the data in the buffer. Output could also be cast in the same manner as input. Syntax is a big concern here, as I want to keep syntax short and neat looking.
+
+
+IDEA: Let the user define the value returned when reading a NULL pointer.
+
+BENEFITS: NULL pointer always returning 1 might be too limiting.
+
+CONCERNS: How is it defined? Is it static or can it be later redefined? Is it the value for every NULL pointer or does it change as more tapes are added? I figure it could be some kind of command at the start of the program. Letting it be redefined would be too powerful and make things too easy for the user. Having the value change as more tapes are added might be interesting, but I feel that it's not very intuitive and doesn't make a lot of sense.
+
+
+IDEA: Functions
+
+BENEFITS: Make complicated programs more feasbile and easier to debug. 
+
+CONCERNS: How are they defined? How are they called? Scope? Do they have their own tapes? Return values? I figure that they would be defined through some kind of syntax similar to loops. The function would then be stored in a buffer and act like any other piece of data, except it can be run through some new command like L.run. They would also be able to be stored in memory cells. Right now I'm thinking they would be part of the global scope and have no memory of their own and no thing like return values. They would basically just be macros.
+
+
+IDEA: More mathematical operations
+
+BENEFITS: 2x and -1 might be too limiting. I want the language to be difficult to work with, but I think the current operation set is too ridiculous. One or two more operations might make things a bit more at the difficulty level I'm aiming for.
+
+CONCERNS: What operations? It's important that they don't allow for things to be trivialized. I purposefully didn't include a +1 operation, so anything that makes +1 trivial to do is something I'm not super keen on. Negation, for example, was an operation I considered initially, but I realized that neg -1 neg is equivalent to +1, meaning that negation is probably too powerful. Math isn't exactly my strong point, so I'm not sure about what operations to add.

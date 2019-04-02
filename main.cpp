@@ -1,4 +1,4 @@
-// Spin version 1.2
+// SPIN version 1.2
 
 #include <iostream>
 #include "Tokenizer.hpp"

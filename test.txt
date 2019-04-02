@@ -4,7 +4,7 @@
 
 #Updated version of the 1.0 version of addTwoNumbers
 #Has the same functionality and limitations, just uses new loop syntax
-#Is much shorter and uses fewer spins, so should be much faster as well
+#Is much shorter and uses fewer SPINs, so should be much faster as well
 
 SPIN # [1]
 L.in # L = X
