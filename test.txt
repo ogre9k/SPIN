@@ -1,25 +1,5 @@
-#Author: Brandon Adamson-Rakidzich
-#Date: 3/30/2019
-#SPIN Version: 1.2
-
-#Updated version of the 1.0 version of addTwoNumbers
-#Has the same functionality and limitations, just uses new loop syntax
-#Is much shorter and uses fewer SPINs, so should be much faster as well
-
-SPIN # [1]
-L.in # L = X
-R.in # R = Y
-L.write # [1] = X
-(.R # using R, because if Y is 0 we don't want to subtract anything
+L.in
+L.neg
 L.sub
-R.sub
-).R
-# L = X-Y, R = 0
-R.read # R = X
-R.dub # R = 2X
-(.L # using L, because if X-Y is 0 we don't want to subtract anything
-R.sub
-L.sub
-).L
-# R = (2X) - (X-Y)
-R.out
+L.neg
+L.out

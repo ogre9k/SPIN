@@ -44,6 +44,7 @@ public:
 	void copy();
 	void in();
 	void out();
+	void neg();
 
 	int getValue();
 	void setValue(int val);

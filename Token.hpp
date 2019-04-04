@@ -30,8 +30,10 @@ public:
 	bool isOpenLoop() const { return _symbol == "("; }
 	bool isCloseLoop() const { return _symbol == ")"; }
 
+	bool isNeg() const { return _symbol == "neg"; } // This is likely temporary
+
 	bool isRegister() const { return isL() || isR(); }
-	bool isInstruction() const { return isWrite() || isRead() || isSub() || isDub() || isCopy() || isIn() || isOut(); }
+	bool isInstruction() const { return isWrite() || isRead() || isSub() || isDub() || isCopy() || isIn() || isOut() || isNeg(); }
 
 	void print() const;
 private:

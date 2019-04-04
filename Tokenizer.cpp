@@ -55,7 +55,7 @@ Token Tokenizer::getToken() {
 		token.eof() = true;
 	else if (c == 'L' || c == 'R' || c == '.' || c == '(' || c == ')')
 		token.symbol(c);
-	else if (c == 'S' || c == 'w' || c == 'r' || c == 's' || c == 'd' || c == 'c' || c == 'i' || c == 'o') {
+	else if (c == 'S' || c == 'w' || c == 'r' || c == 's' || c == 'd' || c == 'c' || c == 'i' || c == 'o' || c == 'n') {
 		inStream.putback(c);
 		token.symbol(readName());
 	}

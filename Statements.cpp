@@ -62,6 +62,8 @@ void TargetStatement::evaluate() {
 		tar->in();
 	else if (_op == "out")
 		tar->out();
+	else if (_op == "neg")
+		tar->neg();
 	else
 		die("TargetStatement::evaluate", "invalid operation specified, " + _op);
 }

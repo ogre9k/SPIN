@@ -19,5 +19,6 @@ void Token::print() const {
 	else if (isOpenLoop()) std::cout << "(\n";
 	else if (isCloseLoop()) std::cout << ")\n";
 	else if (isSPIN()) std::cout << "SPIN\n";
+	else if (isNeg()) std::cout << "neg\n";
 	else std::cout << "Uninitialized token.\n";
 }

@@ -107,6 +107,10 @@ void Buffer::out() {
 	std::cout << _value << std::endl;
 }
 
+void Buffer::neg() {
+	_value = _value * -1;
+}
+
 // Pointer
 Pointer::Pointer() : _rotation(0){}
 
