@@ -16,6 +16,10 @@ Tape::Tape(int size) : _tape(std::vector<int>(size, 0)), _rotation(0), _next(NUL
 void Tape::spin() {
 	if (_rotation == 359) {
 		_rotation = 0;
+		
+		/* This is the code to enable automatic memory allocation after a full 360 tape rotation
+		/* I've disabled it because it's a pretty awful idea
+		/* Might play around with it more
 		if (_next == NULL) {
 			_next = new Tape(360);
 			_next->_parent = this;
@@ -23,6 +27,7 @@ void Tape::spin() {
 		else {
 			_next->spin();
 		}
+		*/
 	}
 	else
 		_rotation++;
@@ -75,39 +80,57 @@ void Buffer::setValue(int val) {
 }
 
 void Buffer::write() {
+	if (debugMessages)
+		std::cout << "Writing value (" << _value << ") from " << name << " onto the tape" << std::endl;
 	POINTER->write(_value);
 }
 
 void Buffer::read() {
 	_value = POINTER->read();
+	if (debugMessages)
+		std::cout << "Reading value (" << _value << ") into from tape " << name << std::endl;
 }
 
 void Buffer::sub() {
+	if (debugMessages)
+		std::cout << "Subbing value (" << _value << ") in " << name << std::endl;
 	_value--;
 }
 
 void Buffer::dub() {
+	if (debugMessages)
+		std::cout << "Doubling value (" << _value << ") in " << name << std::endl;
 	_value += _value;
 }
 
 void Buffer::copy() {
 	if (this == L) {
+		if (debugMessages)
+			std::cout << "Copying value in L (" << _value << "into R" << std::endl;
 		R->setValue(_value);
 	}
 	else {
+		if (debugMessages)
+			std::cout << "Copying value in R (" << _value << ") into L" << std::endl;
 		L->setValue(_value);
 	}
 }
 
 void Buffer::in() {
+	if (debugMessages)
+		std::cout << "Reading value " << "into " << name << std::endl;
 	std::cin >> _value;
 }
 
 void Buffer::out() {
+	if (debugMessages)
+		std::cout << "Outputing value (" << _value << ") from " << name << std::endl;
 	std::cout << _value << std::endl;
 }
 
 void Buffer::neg() {
+	if (debugMessages)
+		std::cout << "Neg'ing value (" << _value << ") in " << name << std::endl;
 	_value = _value * -1;
 }
 

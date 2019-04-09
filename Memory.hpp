@@ -48,7 +48,7 @@ public:
 
 	int getValue();
 	void setValue(int val);
-
+	char name;
 private:
 	int _value;
 };

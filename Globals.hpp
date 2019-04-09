@@ -5,3 +5,4 @@ Buffer extern *L;
 Buffer extern *R;
 Tape extern *TAPE;
 Pointer extern *POINTER;
+bool extern debugMessages;

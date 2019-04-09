@@ -1,0 +1,44 @@
+SPIN
+L.in
+L.write
+SPIN
+R.in
+R.write
+SPIN
+(.L
+	L.read
+	L.neg
+	L.sub
+	L.neg
+	SPIN
+	(.R
+		(.L
+			L.sub
+		).L
+	).L
+	(.L
+		L.write
+		L.sub
+	).L
+	SPIN
+	SPIN
+	R.read
+	R.sub
+	(.R
+		SPIN
+		R.read
+		R.sub
+	).R
+	SPIN
+	L.read
+	L.sub
+	L.write
+	SPIN
+	R.read
+	R.sub
+	R.write
+	SPIN
+).L
+SPIN
+L.read
+L.out
