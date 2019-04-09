@@ -16,6 +16,7 @@ public:
 	SimpleStatement *simpleStatement();
 	TargetStatement *targetStatement();
 	LoopStatement *loopStatement();
+	DebugStatement *debugStatement();
 
 private:
 	Tokenizer &tokenizer;

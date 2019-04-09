@@ -64,7 +64,7 @@ L.read #L = [1] = X
 SPIN #[2]
 R.write #[2] = Y
 SPIN #[3]
-
+-dump 8
 #Memory at this point#
 #[1] = X
 #[2] = Y
@@ -163,4 +163,3 @@ R.dub # R = 2X
 ).L
 # R = 2X - (X-Y)
 R.out
-	

@@ -6,3 +6,4 @@ Buffer extern *R;
 Tape extern *TAPE;
 Pointer extern *POINTER;
 bool extern debugMessages;
+bool extern debugFeatures;

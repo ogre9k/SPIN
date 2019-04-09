@@ -3,6 +3,8 @@
 #include "Tokenizer.hpp"
 #include <ctype.h>
 
+bool extern debugFeatures;
+
 bool isInstruction(char c) {
 	return (c == 'L' || c == 'R' || c == '.' || c == '(' || c == ')' || c == 'S' || c == 'w' || c == 'r' || c == 's' || c == 'd' || c == 'c' || c == 'i' || c == 'o');
 }
@@ -22,6 +24,38 @@ std::string Tokenizer::readName() {
 	if (inStream.good())  // In the loop, we have read one char too many.
 		inStream.putback(c);
 	return name;
+}
+
+std::string Tokenizer::readDebug() {
+	// This function is called when it is known that
+	// the first character in input is an alphabetic character.
+	// The function reads and returns all characters of the name.
+
+	std::string name;
+	char c;
+	inStream.get(c);
+	name += c;
+	while (inStream.get(c) && isalpha(c)) {
+		name += c;
+	}
+	if (inStream.good())  // In the loop, we have read one char too many.
+		inStream.putback(c);
+	return name;
+}
+
+int Tokenizer::readNumber() {
+	// This function is called when it is known that
+	// the first character in input is a digit.
+	// The function reads and returns all remaining digits.
+
+	int intValue = 0;
+	char c;
+	while (inStream.get(c) && isdigit(c)) {
+		intValue = intValue * 10 + c - '0';
+	}
+	if (inStream.good())  // In the loop, we have read one char too many.
+		inStream.putback(c);
+	return intValue;
 }
 
 Token Tokenizer::getToken() {
@@ -58,6 +92,14 @@ Token Tokenizer::getToken() {
 	else if (c == 'S' || c == 'w' || c == 'r' || c == 's' || c == 'd' || c == 'c' || c == 'i' || c == 'o' || c == 'n') {
 		inStream.putback(c);
 		token.symbol(readName());
+	}
+	else if (c == '-') {
+		inStream.putback(c);
+		token.symbol(readDebug());
+	}
+	else if (isdigit(c)) {
+		inStream.putback(c);
+		token.symbol(readNumber());
 	}
 	else {
 		std::cout << "Unknown character in input";

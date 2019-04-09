@@ -10,8 +10,11 @@ public:
 	// Set symbol
 	void symbol(std::string c) { _symbol = c; }
 	void symbol(char c) { _symbol = c; }
+	void symbol(int c) { _number = c; }
 	// Get symbol
 	std::string symbol() { return _symbol; }
+	// Get number
+	int getNumber() { return _number; }
 
 	// Symbol checkers
 	bool &eof() { return _eof; }
@@ -29,8 +32,14 @@ public:
 	bool isOut() const { return _symbol == "out"; }
 	bool isOpenLoop() const { return _symbol == "("; }
 	bool isCloseLoop() const { return _symbol == ")"; }
+	
+	//debug features
+	bool isDebug() const { return _symbol[0] == '-'; }
+	bool isDump() const { return _symbol == "-dump"; }
+	bool isNumber() const { return _number != NULL; }
 
-	bool isNeg() const { return _symbol == "neg"; } // This is likely temporary
+	//temporary features (will be removed / depreciated)
+	bool isNeg() const { return _symbol == "neg"; } //this is TEMPORARY and will be removed
 
 	bool isRegister() const { return isL() || isR(); }
 	bool isInstruction() const { return isWrite() || isRead() || isSub() || isDub() || isCopy() || isIn() || isOut() || isNeg(); }
@@ -38,5 +47,6 @@ public:
 	void print() const;
 private:
 	std::string _symbol;
+	int _number;
 	bool _eof;
 };

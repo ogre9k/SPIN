@@ -17,4 +17,6 @@ private:
 	std::ifstream &inStream;
 	std::vector<Token> _tokens;
 	std::string readName();
+	std::string readDebug();
+	int readNumber();
 };

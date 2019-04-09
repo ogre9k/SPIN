@@ -67,3 +67,14 @@ private:
 	Buffer *_start;
 	Buffer *_end;
 };
+
+class DebugStatement : public Statement {
+public:
+	DebugStatement(std::string op, int value);
+
+	void evaluate();
+	void print();
+private:
+	int _value;
+	std::string _op;
+};

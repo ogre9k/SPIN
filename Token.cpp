@@ -2,14 +2,14 @@
 #include "Token.hpp"
 
 
-Token::Token() : _symbol("\0"), _eof(false) {}
+Token::Token() : _symbol("\0"), _number{ NULL }, _eof(false) {}
 
 void Token::print() const {
-	if (eof()) std::cout << "EOF";
-	else if (isL()) std::cout << "L";
-	else if (isR()) std::cout << "R";
-	else if (isDot()) std::cout << ".";
-	else if (isWrite()) std::cout << "writen";
+	if (eof()) std::cout << "EOF\n";
+	else if (isL()) std::cout << "L\n";
+	else if (isR()) std::cout << "R\n";
+	else if (isDot()) std::cout << ".\n";
+	else if (isWrite()) std::cout << "write\n";
 	else if (isRead()) std::cout << "read\n";
 	else if (isSub()) std::cout << "sub\n";
 	else if (isDub()) std::cout << "dub\n";

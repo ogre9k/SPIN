@@ -110,3 +110,20 @@ void LoopStatement::print() {
 	_statements->print();
 	std::cout << ")" << std::endl;
 }
+
+//Debug Statement
+DebugStatement::DebugStatement(std::string op, int value) : _op(op), _value(value) {}
+
+void DebugStatement::evaluate() {
+	if (debugFeatures) {
+		if (_op == "-dump")
+			TAPE->dumpTape(_value);
+	}
+	else {
+		std::cout << "WARNING: Tried to call debug feature (" << _op << ") while debugFeatures = false. Ignoring." << std::endl;
+	}
+}
+
+void DebugStatement::print() {
+	std::cout << _op << " " << _value << std::endl;
+}

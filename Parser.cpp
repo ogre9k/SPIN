@@ -38,6 +38,10 @@ Statements *Parser::statements() {
 			tokenizer.ungetToken();
 			stmts->addStatement(loopStatement());
 		}
+		else if (tok.isDebug()) {
+			tokenizer.ungetToken();
+			stmts->addStatement(debugStatement());
+		}
 		tok = tokenizer.getToken();
 	}
 
@@ -117,4 +121,21 @@ LoopStatement *Parser::loopStatement() {
 	}
 
 	return new LoopStatement(stmts, start, end);
+}
+
+DebugStatement *Parser::debugStatement() {
+	std::string op;
+	int value;
+
+	Token tok = tokenizer.getToken();
+	if (!tok.isDebug())
+		die("Parser::debugStatement", "Expected a debug command, got ", tok);
+	op = tok.symbol();
+
+	tok = tokenizer.getToken();
+	if (op == "-dump" && !tok.isNumber())
+		die("Parser::debugStatement", "Expected a number argument for -dump, got ", tok);
+	value = tok.getNumber();
+
+	return new DebugStatement(op, value);
 }

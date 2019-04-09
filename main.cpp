@@ -11,8 +11,10 @@ Buffer extern *L = new Buffer();
 Buffer extern *R = new Buffer();
 Tape extern *TAPE = new Tape(360);
 Pointer extern *POINTER = new Pointer();
-bool extern debugMessages = false
-;
+
+bool extern debugMessages = false;
+bool extern debugFeatures = false;
+
 int main(int argc, char *argv[]) {
 
 	std::ifstream inputStream;
