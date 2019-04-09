@@ -38,7 +38,6 @@ R.read # R = 1
 	L.sub
 ).L #[359]
 R.write #[359] = 1
-R.out
 SPIN #[0]
 
 	
@@ -47,10 +46,38 @@ SPIN #[0]
 SPIN #[1]
 L.in #L = X 
 L.write #[1] = X
-SPIN #[2]
+SPIN SPIN SPIN #[4]
+L.write #[4] = X (this is a backup, as this algorithm destroys one of the X's)
+SPIN #[5]
 R.in #R = Y
+R.write #[5] = Y
+SPIN #[6]
+L.read
+L.sub
+(.L
+	SPIN
+	L.read
+	L.sub
+).L
+SPIN SPIN #[1]
+L.read #L = [1] = X
+SPIN #[2]
 R.write #[2] = Y
 SPIN #[3]
+
+#Memory at this point#
+#[1] = X
+#[2] = Y
+#[3] = 0 (this is the temp flag for if Y == 0)
+#[4] = X (this won't be modified by X>Y)
+#[5] = Y (this won't be modified by X>Y)
+#[6] = 0 (this is the flag for boolean result X>Y)
+#[359] = 1 (stop value for zeroing)
+
+#X + Y = 2X - (X-Y), but only if X >= Y
+#So first we see if X > Y
+#If X <= Y, then we will swap the values of X and Y before doing addition
+
 (.L
 	#This loop will subtract 1 from X and Y at the end of each iteration
 	#It ends when X is 0
@@ -58,7 +85,7 @@ SPIN #[3]
 	#If this happens, it means that Y was smaller than X (as it hit 0 before X did)
 	
 	L.read # L = [3] = 0
-	SPIN SPIN #[5]
+	SPIN SPIN SPIN SPIN #[7]
 	#Zero
 	L.sub
 	(.L
@@ -67,7 +94,7 @@ SPIN #[3]
 		L.sub
 	).L
 	L.read # L = [359] = 1
-	SPIN SPIN SPIN SPIN SPIN # [4]
+	SPIN SPIN SPIN SPIN SPIN SPIN SPIN # [6]
 
 	#L is used as a temp flag.
 	#It starts at 1, and then if Y is not 0, L gets set to 0
@@ -80,12 +107,12 @@ SPIN #[3]
 	#If Y was 0, then the previous loop didn't run, which means that L is 1
 	#So this loop will run
 	(.L
-		L.write # [4] = 1 (This means X > Y)
+		L.write # [6] = 1 (This means X > Y)
 		L.sub
 	).L
 
 	#This is where X and Y are reduced by 1
-	SPIN #[5]
+	SPIN SPIN SPIN #[9]
 	R.read
 	R.sub
 	(.R
@@ -103,6 +130,37 @@ SPIN #[3]
 	R.write
 	SPIN #[3]
 ).L
+
+#We assume X <= Y to start, and swap if that isn't true
 SPIN # [4]
-L.read # if the value at [4] is 0, X <= Y. If the value at [4] is 1, X > Y
-L.out
+R.read # R = X
+SPIN # [5]
+L.read # R = Y
+SPIN # [6]
+
+( #see if [6] is 1, meaning X > Y
+	#Swap X and Y
+	R.write #[6] = X
+	L.copy #R = Y
+	L.read #L = X
+	SPIN #[7]
+)
+
+#Addition Code#
+
+L.write #[7] = X
+(.R # Using R, because if Y is 0 we don't want to subtract anything
+	L.sub
+	R.sub
+).R
+
+# L = X-Y, R = 0
+R.read # R = X
+R.dub # R = 2X
+(.L # Using L, because if X-Y is 0 we don't want to subtract anything
+	R.sub
+	L.sub
+).L
+# R = 2X - (X-Y)
+R.out
+	

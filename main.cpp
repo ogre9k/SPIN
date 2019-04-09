@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 
 	std::ifstream inputStream;
 
-	inputStream.open("GreaterThanNoNeg.txt", std::ios::in);
+	inputStream.open("TrueAddition.txt", std::ios::in);
 	if (!inputStream.is_open()) {
 		std::cout << "Unable to open " << argv[1] << ". Terminating...";
 		perror("Error when attempting to open the input file.");

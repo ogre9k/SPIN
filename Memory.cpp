@@ -54,6 +54,11 @@ int Tape::read(int pointRot) {
 		return _tape[(360 + (pointRot - _rotation)) % 360];
 }
 
+void Tape::dumpTape(int limit) {
+	for (int i = 0; i < limit; i++) {
+		std::cout << "[" << i << "]: " << _tape[i] << std::endl;
+	}
+}
 void Tape::write(int pointRot, int val) {
 	if (_rotation - pointRot == 0) {
 		if (_next == NULL)

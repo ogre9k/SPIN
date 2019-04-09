@@ -11,6 +11,7 @@ public:
 	std::vector<int> &tape();
 	int read(int);
 	void write(int, int);
+	void dumpTape(int); // print all values in the tape until a certain point
 private:
 	int _rotation;
 	Tape *_next;

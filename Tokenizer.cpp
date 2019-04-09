@@ -61,6 +61,7 @@ Token Tokenizer::getToken() {
 	}
 	else {
 		std::cout << "Unknown character in input";
+		printProcessedTokens();
 		exit(1);
 	}
 	_tokens.push_back(token);

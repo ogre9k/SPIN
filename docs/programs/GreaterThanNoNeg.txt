@@ -7,8 +7,7 @@ R.write
 SPIN
 (.L
 	L.read
-	SPIN
-	SPIN #[5]
+	SPIN SPIN #[5]
 	L.sub
 	(.L
 		SPIN
@@ -16,10 +15,7 @@ SPIN
 		L.sub
 	).L
 	L.read # [0]
-	SPIN
-	SPIN
-	SPIN
-	SPIN # [4]
+	SPIN SPIN SPIN SPIN # [4]
 	(.R
 		(.L
 			L.sub
