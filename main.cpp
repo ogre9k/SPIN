@@ -13,13 +13,13 @@ Tape extern *TAPE = new Tape(360);
 Pointer extern *POINTER = new Pointer();
 
 bool extern debugMessages = false;
-bool extern debugFeatures = false;
+bool extern debugFeatures = true;
 
 int main(int argc, char *argv[]) {
 
 	std::ifstream inputStream;
 
-	inputStream.open("TrueAddition.txt", std::ios::in);
+	inputStream.open("TrueAdditionLoop.txt", std::ios::in);
 	if (!inputStream.is_open()) {
 		std::cout << "Unable to open " << argv[1] << ". Terminating...";
 		perror("Error when attempting to open the input file.");

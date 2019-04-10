@@ -30,7 +30,7 @@ void SimpleStatement::evaluate() {
 }
 
 void SimpleStatement::print() {
-	std::cout << "SPIN";
+	std::cout << "SPIN" << std::endl;
 }
 
 // TargetStatement
@@ -69,7 +69,7 @@ void TargetStatement::evaluate() {
 }
 
 void TargetStatement::print() {
-	std::cout << _target << "." << _op;
+	std::cout << _target << "." << _op << std::endl;
 }
 
 // LoopStatement
@@ -84,9 +84,9 @@ void LoopStatement::evaluate() {
 	}
 	else if (_start != NULL && _end == NULL) { // (.X )
 		if (_start->getValue() != 0) {
-			while (POINTER->read() != 0) {
+			do{
 				_statements->evaluate();
-			}
+			} while (POINTER->read() != 0);
 		}
 	}
 	else if (_start == NULL && _end != NULL) { // ( ).X
@@ -98,17 +98,25 @@ void LoopStatement::evaluate() {
 	}
 	else {									// (.X ).Y
 		if (_start->getValue() != 0) {
-			while (_end->getValue() != 0) { 
+			do { 
 				_statements->evaluate();
-			}
+			} while (_end->getValue() != 0);
 		}
 	}
 }
 
 void LoopStatement::print() {
-	std::cout << "(" << std::endl;
+	if (_start != NULL)
+		std::cout << "(." << _start->name << std::endl;
+	else
+		std::cout << "(" << std::endl;
+
 	_statements->print();
-	std::cout << ")" << std::endl;
+
+	if (_end != NULL)
+		std::cout << ")." << _end->name << std::endl;
+	else
+		std::cout << ")" << std::endl;
 }
 
 //Debug Statement

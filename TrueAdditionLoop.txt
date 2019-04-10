@@ -1,0 +1,267 @@
+#Author: Brandon Adamson-Rakidzich
+#Date: 4/10/2019
+#SPIN Version: 1.2
+
+#This is a version of TrueAddition that does X + Y, then lets the user input
+#another number to add to the result of that, in a loop until 0 is entered.
+#Doesn't currently work... 1 1 1 produces 0, when it should produce 3. Memory cell [9] is getting set to 1 somehow after the 3rd input, probably why it's breaking
+
+# set [359] to 1 so we can use it for zeroing
+# this is more stable than using the NULL pointer for zeroing
+
+L.read
+
+
+#This part is not part of the standard [359] = 1 header
+###################
+#Set [3] to 1 to enable a do while loop later
+SPIN SPIN SPIN #[3]
+L.write #[3] = 1
+###################
+
+L.dub
+L.dub
+L.dub
+L.dub
+L.dub
+L.dub # L = 64
+
+R.read
+R.dub
+R.dub
+R.dub
+R.dub # R = 16
+
+R.sub
+R.sub
+R.sub
+R.sub
+R.sub
+R.sub # R = 10
+R.dub # R = 20
+R.sub # R = 19
+(.R
+	L.sub
+	R.sub
+).R # L = 45, R = 0
+
+L.dub
+L.dub
+L.dub # L = 360
+L.sub # L = 359
+
+#This part is not part of the standard [359] = 1 header
+###################
+#Subtract 3 from L to makeup for the SPINs we did earlier
+L.sub
+L.sub
+L.sub 
+###################
+
+R.read # R = 1
+
+(.L
+	SPIN
+	L.sub
+).L #[359]
+R.write #[359] = 1
+SPIN #[0]
+	
+# Begin Main Program #
+
+SPIN #[1]
+L.in #L = X 
+L.write #[1] = X
+SPIN SPIN SPIN #[4]
+L.write #[4] = X (this is a backup, as this algorithm destroys one of the X's)
+SPIN #[5]
+R.in #R = Y
+R.write #[5] = Y
+SPIN #[6]
+L.read
+L.sub
+(.L
+	SPIN
+	L.read
+	L.sub
+).L
+SPIN SPIN #[1]
+L.read #L = [1] = X
+SPIN #[2]
+R.write #[2] = Y
+SPIN #[3]
+
+#Memory at this point#
+#[1] = X
+#[2] = Y
+#[3] = 0 (this is the temp flag for if Y == 0)
+#[4] = X (this won't be modified by X>Y)
+#[5] = Y (this won't be modified by X>Y)
+#[6] = 0 (this is the flag for boolean result X>Y)
+#[359] = 1 (stop value for zeroing)
+
+
+#X + Y = 2X - (X-Y), but only if X >= Y
+#So first we see if X > Y
+#If X <= Y, then we will swap the values of X and Y before doing addition
+
+
+#This outer loop will keep going until we have a zero
+#Pointer->[3] = 1 at this point, so it'll always run at least once
+(
+    (.L
+        #This loop will subtract 1 from X and Y at the end of each iteration
+        #It ends when X is 0
+        #When Y hits 0, it will set a flag at [4] to 1
+        #If this happens, it means that Y was smaller than X (as it hit 0 before X did)
+        
+        L.read # L = [3] = 0
+        SPIN SPIN SPIN SPIN #[7]
+        
+        #Set L to 0 (it will be 1 on our first loop through this)
+        (.L
+            L.sub
+        ).L
+        
+        #Zero the pointer
+        L.sub
+        (.L
+            SPIN
+            L.read
+            L.sub
+        ).L
+        L.read # L = [359] = 1
+        SPIN SPIN SPIN SPIN SPIN SPIN SPIN # [6]
+
+        #L is used as a temp flag.
+        #It starts at 1, and then if Y is not 0, L gets set to 0
+        (.R # Y != 0
+            (.L #Zero L
+                L.sub
+            ).L
+        ).L
+
+        #If Y was 0, then the previous loop didn't run, which means that L is 1
+        #So this loop will run
+        (.L
+            L.write # [6] = 1 (This means X > Y)
+            L.sub
+        ).L
+
+        #This is where X and Y are reduced by 1
+        SPIN SPIN SPIN #[9]
+        R.read
+        R.sub
+        (.R
+            SPIN
+            R.read
+            R.sub
+        ).R
+        SPIN SPIN #[1]
+        L.read
+        L.sub
+        L.write
+        SPIN #[2]
+        R.read
+        R.sub
+        R.write
+        SPIN #[3]
+    ).L
+
+    #We assume X <= Y to start, and swap if that isn't true
+    SPIN # [4]
+    R.read # R = X
+    SPIN # [5]
+    L.read # R = Y
+    SPIN # [6]
+
+    ( #see if [6] is 1, meaning X > Y
+        #Swap X and Y
+        R.write #[6] = X
+        L.copy #R = Y
+        L.read #L = X
+        SPIN #[7]
+    )
+
+    #Addition Code#
+
+    L.write #[7] = X
+    (.R # Using R, because if Y is 0 we don't want to subtract anything
+        L.sub
+        R.sub
+    ).R
+
+    # L = X-Y, R = 0
+    R.read # R = X
+    R.dub # R = 2X
+    (.L # Using L, because if X-Y is 0 we don't want to subtract anything
+        R.sub
+        L.sub
+    ).L
+    # R = 2X - (X-Y)
+    R.out
+    
+    #Reset memory and get new Y
+    #R is our new X
+    #Memory needs to exactly match how memory was laid out in first loop (although [3] can be 0 this time)
+    
+    #Zero pointer
+    L.read #current index [7] will always be 0 at this point
+    L.sub
+    (.L
+        SPIN
+        L.read
+        L.sub
+    ).L
+    
+    #Zero memory values up through 6
+    L.read #L = 1
+    L.sub #L = 0
+    SPIN SPIN #[1]
+    L.write
+    SPIN #[2]
+    L.write
+    SPIN #[3]
+    L.write
+    SPIN #[4]
+    L.write
+    SPIN #[5]
+    L.write
+    SPIN #[6]
+    L.write
+    SPIN #[7]
+    L.write
+
+    #Zero pointer again
+    L.read #current index [7] will always be 0 at this point
+    L.sub
+    (.L
+        SPIN
+        L.read
+        L.sub
+    ).L
+    
+    SPIN SPIN #[1]
+    #Set up memory for next loop
+    R.copy # L = R = X
+    L.write #[1] = X
+    SPIN SPIN SPIN #[4]
+    L.write #[4] = X (this is a backup, as this algorithm destroys one of the X's)
+    SPIN #[5]
+    R.in #R = Y
+    R.write #[5] = Y
+    SPIN SPIN #[7]
+    L.read
+    L.sub
+    (.L
+        SPIN
+        L.read
+        L.sub
+    ).L
+    SPIN SPIN #[1]
+    L.read #L = [1] = X
+    SPIN #[2]
+    R.write #[2] = Y
+    SPIN #[3]
+    
+).R
